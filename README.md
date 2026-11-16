@@ -6,13 +6,22 @@ This repository holds **notarized app builds** and the Sparkle `appcast.xml` onl
 
 ## Sparkle feed
 
-`SUFeedURL` in the app points to:
-
 https://github.com/Bygg-Digitalt-AS/TimeTracker-releases/releases/latest/download/appcast.xml
 
-## Publishing a build
+## Publish a build
 
-1. Archive and export a Developer ID–signed, notarized `.app`.
-2. Zip it (for example `TimeTracker-0.1.0.zip`).
-3. Sign the zip with Sparkle `sign_update` and put the signature in `appcast.xml`.
-4. Create a GitHub Release and attach both the zip and `appcast.xml`.
+From the private Time Tracker repo on a Mac that has:
+
+1. **Developer ID Application** certificate (Xcode → Settings → Accounts → Manage Certificates)
+2. Notary credentials stored as `TimeTracker-notary`
+3. Sparkle EdDSA private key in the login keychain
+
+Run:
+
+```bash
+./scripts/publish-direct.sh
+```
+
+That archives a Release build (sandbox off), notarizes it, generates a Sparkle-signed zip + `appcast.xml`, and creates a GitHub Release here with both files attached.
+
+Bump `CURRENT_PROJECT_VERSION` before each publish so Sparkle sees a newer build.
